@@ -33,8 +33,9 @@
                         </td>
 
                         <td class="px-8 py-6">
-                            <img src="https://placehold.co/160x200?text=Event"
-                                 class="w-16 h-20 rounded-xl object-cover shadow-sm">
+                            <img src="{{ $event->poster_path ? asset($event->poster_path) : 'https://placehold.co/160x200?text=Event' }}"
+                                class="w-16 h-20 rounded-xl object-cover shadow-sm"
+                                onerror="this.onerror=null;this.src='https://placehold.co/160x200?text=Event';">
                         </td>
 
                         <td class="px-8 py-6">
