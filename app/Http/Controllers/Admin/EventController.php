@@ -9,13 +9,23 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    public function index()
-    {
-        $events = Event::with('category')->latest()->paginate(10);
-        $categories = Category::all();
+    public function index(Request $request)
+{
+    $categories = Category::all();
 
-        return view('admin.events.index', compact('events', 'categories'));
-    }
+    $events = Event::with('category')
+        ->when($request->filled('search'), function ($query) use ($request) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        })
+        ->when($request->filled('category'), function ($query) use ($request) {
+            $query->where('category_id', $request->category);
+        })
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
+
+    return view('admin.events.index', compact('events', 'categories'));
+}
 
     public function create()
     {

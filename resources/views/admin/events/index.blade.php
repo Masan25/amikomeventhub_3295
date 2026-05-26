@@ -10,15 +10,25 @@
 
 @section('content')
 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
-    <div class="px-8 py-6 bg-slate-50/50 border-b flex gap-4">
-        <input type="text" placeholder="Cari nama event..." class="flex-1 px-5 py-3 rounded-xl border-slate-200 border bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
-        <select class="px-5 py-3 rounded-xl border-slate-200 border bg-white outline-none">
-            <option>Semua Kategori</option>
-            @foreach($categories as $category)
-                <option>{{ $category->name }}</option>
-            @endforeach
-        </select>
-    </div>
+    <form action="{{ route('admin.events.index') }}" method="GET" class="px-8 py-6 bg-slate-50/50 border-b flex gap-4">
+    <input type="text"
+           name="search"
+           value="{{ request('search') }}"
+           placeholder="Cari nama event..."
+           class="flex-1 px-5 py-3 rounded-xl border-slate-200 border bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+
+    <select name="category"
+            onchange="this.form.submit()"
+            class="px-5 py-3 rounded-xl border-slate-200 border bg-white outline-none">
+        <option value="">Semua Kategori</option>
+
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</form>
 
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
