@@ -16,7 +16,7 @@ class HomeController extends Controller
             ->where('date', '>=', now())
             ->orderBy('date', 'asc');
 
-        if ($request->has('category') && $request->category != '') {
+        if ($request->filled('category')) {
             $query->whereHas('category', function ($q) use ($request) {
                 $q->where('slug', $request->category);
             });

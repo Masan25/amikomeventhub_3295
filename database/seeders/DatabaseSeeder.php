@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'category_id' => $seminar->id,
             'title' => 'Digital Business Seminar',
             'description' => 'Seminar tentang strategi bisnis digital untuk mahasiswa dan pelaku UMKM.',
-            'date' => '2026-05-26 09:00:00',
+            'date' => '2026-05-29 09:00:00',
             'location' => 'Ruang Seminar AMIKOM',
             'price' => 35000,
             'stock' => 120,

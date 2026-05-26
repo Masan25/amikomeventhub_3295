@@ -12,8 +12,9 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::with('category')->latest()->paginate(10);
+        $categories = Category::all();
 
-        return view('admin.events.index', compact('events'));
+        return view('admin.events.index', compact('events', 'categories'));
     }
 
     public function create()
@@ -37,9 +38,7 @@ class EventController extends Controller
 
         Event::create($data);
 
-        return redirect()
-            ->route('admin.events.index')
-            ->with('success', 'Data Event berhasil ditambahkan.');
+        return redirect()->route('admin.events.index')->with('success', 'Data Event berhasil ditambahkan.');
     }
 
     public function show(Event $event)
@@ -68,17 +67,13 @@ class EventController extends Controller
 
         $event->update($data);
 
-        return redirect()
-            ->route('admin.events.index')
-            ->with('success', 'Rincian data event berhasil diperbarui.');
+        return redirect()->route('admin.events.index')->with('success', 'Rincian data event berhasil diperbarui.');
     }
 
     public function destroy(Event $event)
     {
         $event->delete();
 
-        return redirect()
-            ->route('admin.events.index')
-            ->with('success', 'Data event berhasil dihapus secara permanen.');
+        return redirect()->route('admin.events.index')->with('success', 'Data event berhasil dihapus secara permanen.');
     }
 }

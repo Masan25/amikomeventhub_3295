@@ -3,21 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
 
 class EventController extends Controller
 {
-    public function show()
+    public function show(Event $event)
     {
-        return view('event-detail');
+        $event->load('category');
+
+        return view('event-detail', compact('event'));
     }
 
-    public function checkout()
+    public function checkout(Event $event)
     {
-        return view('checkout');
+        $event->load('category');
+
+        return view('checkout', compact('event'));
     }
 
-    public function ticket()
+    public function ticket(Request $request, Event $event)
     {
-        return view('ticket');
+        $event->load('category');
+
+        $buyerName = $request->query('name', 'Peserta Event');
+        $buyerEmail = $request->query('email', '-');
+        $buyerPhone = $request->query('phone', '-');
+
+        $orderId = 'TRX-' . str_pad($event->id, 5, '0', STR_PAD_LEFT);
+        $ticketCode = 'TKT-' . date('Ymd') . '-' . str_pad($event->id, 4, '0', STR_PAD_LEFT);
+
+        return view('ticket', compact(
+            'event',
+            'buyerName',
+            'buyerEmail',
+            'buyerPhone',
+            'orderId',
+            'ticketCode'
+        ));
     }
 }

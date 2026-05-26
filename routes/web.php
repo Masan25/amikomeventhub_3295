@@ -8,14 +8,19 @@ use App\Http\Controllers\Admin\EventController as EventAdminController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CategoryController;
 
-// Rute User Area
+// Public Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/event/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/checkout/{event}', [EventController::class, 'checkout'])->name('checkout');
+Route::get('/checkout', function () {
+    return redirect()->route('home');
+});
+Route::get('/my-ticket/{event}', [EventController::class, 'ticket'])->name('ticket');
+Route::get('/my-ticket', function () {
+    return redirect()->route('home');
+});
 
-Route::get('/event/1', [EventController::class, 'show'])->name('events.show');
-Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
-Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
-
-// Rute tambahan dari tugas sebelumnya
+// Rute tambahan dari tugas awal
 Route::get('/tentang', function () {
     return '<h1>Ini adalah Halaman Tentang Aplikasi Event Hub</h1>';
 });
@@ -36,12 +41,10 @@ Route::get('/bantuan', function () {
     return view('bantuan');
 });
 
-// Rute Admin Area
+// Admin Area
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
     Route::resource('events', EventAdminController::class);
-
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 });
