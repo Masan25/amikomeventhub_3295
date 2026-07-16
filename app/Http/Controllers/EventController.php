@@ -7,21 +7,23 @@ use App\Models\Event;
 
 class EventController extends Controller
 {
-    public function show(Event $event)
+    public function show(\App\Models\Event $event)
     {
-        $event->load('category');
+        // Mengambil daftar kategori untuk keperluan menu footer
+        $categories = \App\Models\Category::all();
 
-        return view('event-detail', compact('event'));
+        // Me-render view dengan membawa data kategori dan data spesifik acara tersebut
+        return view('event-detail', compact('categories', 'event'));
     }
 
-    public function checkout(Event $event)
+    public function checkout(\App\Models\Event $event)
     {
         $event->load('category');
 
         return view('checkout', compact('event'));
     }
 
-    public function ticket(Request $request, Event $event)
+    public function ticket(Request $request, \App\Models\Event $event)
     {
         $event->load('category');
 
