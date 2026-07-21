@@ -12,18 +12,37 @@ use App\Http\Controllers\Admin\AuthController;
 
 // Public Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show');
-Route::get('/checkout/{event}', [\App\Http\Controllers\EventController::class, 'checkout'])->name('checkout');
-Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
-Route::post('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
-Route::get('/payment/{order_id}', [\App\Http\Controllers\CheckoutController::class, 'payment'])->name('checkout.payment');
+
+Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])
+    ->name('events.show');
+
+Route::get('/checkout/{event}', [\App\Http\Controllers\EventController::class, 'checkout'])
+    ->name('checkout');
+
+Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])
+    ->name('checkout.create');
+
+Route::post('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'store'])
+    ->name('checkout.store');
+
+Route::get('/success/{order_id}', [\App\Http\Controllers\CheckoutController::class, 'success'])
+    ->name('checkout.success');
+
+Route::get('/payment/{order_id}', [\App\Http\Controllers\CheckoutController::class, 'payment'])
+    ->name('checkout.payment');
+
 Route::get('/checkout', function () {
     return redirect()->route('home');
 });
-Route::get('/my-ticket/{event}', [EventController::class, 'ticket'])->name('ticket');
+
+Route::get('/my-ticket/{event}', [EventController::class, 'ticket'])
+    ->name('ticket');
+
 Route::get('/my-ticket', function () {
     return redirect()->route('home');
 });
+
+Route::post('/midtrans/callback', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
 
 // Rute tambahan dari tugas awal
 Route::get('/tentang', function () {
@@ -53,19 +72,30 @@ Route::get('/login', function () {
 
 // ADMIN AREA
 Route::prefix('admin')->name('admin.')->group(function () {
+
     // Login (Tanpa Middleware)
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login'])->name('login.post');
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('login', [AuthController::class, 'showLogin'])
+        ->name('login');
+
+    Route::post('login', [AuthController::class, 'login'])
+        ->name('login.post');
+
+    Route::post('logout', [AuthController::class, 'logout'])
+        ->name('logout');
 
     // Protected Admin
     Route::middleware(['auth', 'admin'])->group(function () {
+
         Route::get('dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
         Route::resource('events', EventAdminController::class);
+
         Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])
             ->name('transactions.index');
+
         Route::resource('categories', AdminCategoryController::class);
+
         Route::resource('partners', PartnerController::class);
     });
 });
